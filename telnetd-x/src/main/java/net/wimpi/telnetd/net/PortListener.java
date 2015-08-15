@@ -64,8 +64,8 @@ public class PortListener
 
   private Thread m_Thread;
   private ConnectionManager connectionManager;	//connection management thread
-  private boolean m_Stopping = false;
-  private boolean m_Available;               		//Flag for availability
+  private volatile boolean m_Stopping = false;
+  private volatile boolean m_Available;               		//Flag for availability
 
 
   /**
@@ -168,21 +168,29 @@ public class PortListener
       log.info(MessageFormat.format(logmsg, args));
 
       do {
+        Socket s = null;
+        boolean bErr = true;
         try {
-          Socket s = m_ServerSocket.accept();
+          s = null;
+          s = m_ServerSocket.accept();
           if (m_Available) {
             connectionManager.makeConnection(s);
           } else {
             //just shut down the socket
-            s.close();
+            closeIgnoringExceptions(s);
           }
-        } catch (SocketException ex) {
+          bErr = false;
+        } catch (Throwable ex) {
           if (m_Stopping) {
             //server socket was closed blocked in accept
             log.debug("run(): ServerSocket closed by stop()");
           } else {
-            log.error("run()", ex);
+            log.error("IOException in accept/setup socket", ex);
           }
+        } finally {
+           if(bErr) {
+             closeIgnoringExceptions(s);
+           }
         }
       } while (!m_Stopping);
 
@@ -193,6 +201,15 @@ public class PortListener
   }//run
 
 
+  private static void closeIgnoringExceptions(Socket s) {
+     if(s != null) {
+       try {
+         s.close();
+       }catch(Exception ignore) {
+         log.debug("[HANDLED] Exceptions closing socket:" + s, ignore);
+       }
+     }
+  }
   /**
    * Returns reference to ConnectionManager instance associated
    * with the PortListener.

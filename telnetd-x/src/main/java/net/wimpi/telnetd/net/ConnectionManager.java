@@ -188,7 +188,7 @@ public class ConnectionManager implements Runnable {
      *
      * @param insock Socket thats representing the incoming connection.
      */
-    public void makeConnection(Socket insock) {
+    public void makeConnection(Socket insock) throws IOException {
         log.debug("makeConnection()::" + insock.toString());
         if (connectionFilter == null || (connectionFilter != null && connectionFilter.isAllowed(insock.getInetAddress()))) {
             //we create the connection data object at this point to
