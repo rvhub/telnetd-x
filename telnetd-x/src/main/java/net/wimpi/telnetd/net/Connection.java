@@ -39,6 +39,7 @@ import net.wimpi.telnetd.shell.ShellManager;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import java.io.IOException;
 import java.util.Vector;
 
 /**
@@ -88,7 +89,7 @@ public class Connection
    *            of this connection.
    * @see net.wimpi.telnetd.net.ConnectionData
    */
-  public Connection(ThreadGroup tcg, ConnectionData cd) {
+  public Connection(ThreadGroup tcg, ConnectionData cd) throws IOException {
     super(tcg, ("Connection" + (++m_Number)));
 
     m_ConnectionData = cd;

@@ -76,7 +76,7 @@ public class TerminalIO implements BasicTerminalIO {
      *
      * @param con Connection the instance will be working for
      */
-    public TerminalIO(Connection con) {
+    public TerminalIO(Connection con) throws IOException {
         m_Connection = con;
         m_AcousticSignalling = true;
         m_Autoflush = true;
@@ -89,17 +89,13 @@ public class TerminalIO implements BasicTerminalIO {
             m_TelnetIO = new TelnetIO();
             m_TelnetIO.setConnection(con);
             m_TelnetIO.initIO();
-        } catch (Exception ex) {
-            //handle, at least log
-        }
-
-        //set default terminal
-        try {
             setDefaultTerminal();
         } catch (Exception ex) {
-            log.error("TerminalIO()", ex);
-            throw new RuntimeException();
+            //handle, at least log
+            log.error("Unable to bootstrap the terminal.", ex);
+            throw new IOException("Unable to bootstrap the terminal.", ex);
         }
+
     }//constructor
 
     /************************************************************************
