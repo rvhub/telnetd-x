@@ -1,0 +1,17 @@
+*.class
+.mtj.tmp/
+*.jar
+*.war
+*.ear
+hs_err_pid*
+.DS_STORE
+.DS_Store
+*~
+.classpath
+.project
+.settings
+*.iml
+*.ipr
+*.iws
+target
+.idea
