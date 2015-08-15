@@ -57,8 +57,8 @@ public class PortListener
 
   private static Log log = LogFactory.getLog(PortListener.class);
 
-  private String m_Name;
-  private int m_Port;							            //port number running on
+  private final String m_Name;
+  private final int m_Port;							            //port number running on
   private int m_FloodProtection;					    //flooding protection
   private ServerSocket m_ServerSocket = null; //server socket
 
@@ -113,9 +113,9 @@ public class PortListener
    */
   public void start() {
     log.debug("start()");
-    m_Thread = new Thread(this);
-    m_Thread.start();
     m_Available = true;
+    m_Thread = new Thread(this, "TelnetD::PortListner::" + m_Name + "::port::" + m_Port);
+    m_Thread.start();
   }//start
 
   /**

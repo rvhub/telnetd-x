@@ -149,7 +149,7 @@ public class ConnectionManager implements Runnable {
      * Starts this <tt>ConnectionManager</tt>.
      */
     public void start() {
-        m_Thread = new Thread(this);
+        m_Thread = new Thread(this, "TelnetD::ConnectionManager");
         m_Thread.start();
     }//start
 
